@@ -14,6 +14,21 @@ export default function KundliFormNew() {
     })
     const currentYear = new Date().getFullYear();
 
+    const monthOptions = [
+        { label: "January", value: "1" },
+        { label: "February", value: "2" },
+        { label: "March", value: "3" },
+        { label: "April", value: "4" },
+        { label: "May", value: "5" },
+        { label: "June", value: "6" },
+        { label: "July", value: "7" },
+        { label: "August", value: "8" },
+        { label: "September", value: "9" },
+        { label: "October", value: "10" },
+        { label: "November", value: "11" },
+        { label: "December", value: "12" },
+    ];
+
     const handleChange = (e) => {
         const { name, value } = e.target
         setFormData((prevData) => ({
@@ -46,19 +61,7 @@ export default function KundliFormNew() {
             alert(`Please enter a valid year between 1900 and ${currentYear}`)
             return
         }
-
-        console.log("Form Data:", formData)
-        // Here you would typically send the data to your backend
     }
-
-    // Generate options for months (1-12)
-    const monthOptions = Array.from({ length: 12 }, (_, i) => i + 1)
-
-    // Generate options for hours (1-12)
-    const hourOptions = Array.from({ length: 12 }, (_, i) => i + 1)
-
-    // Generate options for minutes (0-59)
-    const minuteOptions = Array.from({ length: 60 }, (_, i) => i)
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -67,7 +70,6 @@ export default function KundliFormNew() {
                     <h1 className="text-2xl font-bold text-white tracking-wider">KUNDLI FORM</h1>
                     <p className="text-purple-100 mt-1">Enter your birth details for accurate predictions</p>
                 </div>
-
                 <div className="p-4 w-full">
                     <form onSubmit={handleSubmit} className="space-y-3">
                         {/* Gender Selection */}
@@ -142,7 +144,53 @@ export default function KundliFormNew() {
                         <div className="mb-5 bg-white p-2 rounded-xl border border-purple-100 shadow-sm">
                             <label className="block text-sm font-medium text-gray-700 mb-3">Date of Birth</label>
                             <div className="grid grid-cols-3 gap-4">
-                                {/* Day */}
+                                {/* Year */}
+                                <div>
+                                    <label htmlFor="birthYear" className="block text-xs font-medium text-gray-500 mb-1">
+                                        Year
+                                    </label>
+                                    <div className="relative">
+                                        <input
+                                            type="number"
+                                            id="birthYear"
+                                            name="birthYear"
+                                            value={formData.birthYear}
+                                            onChange={handleChange}
+                                            min="1900"
+                                            max={currentYear}
+                                            className="mt-1 block w-full px-3 py-2 border border-purple-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                                            placeholder={`1900-${currentYear}`}
+                                            required
+                                        />
+                                        {formData.birthYear &&
+                                            (Number.parseInt(formData.birthYear) < 1900 || Number.parseInt(formData.birthYear) > currentYear) && (
+                                                <p className="absolute left-0 text-xs text-red-500 mt-2.5 whitespace-nowrap">{`Please enter a valid year (1900-${currentYear})`}</p>
+                                            )}
+                                    </div>
+                                </div>
+
+
+                                {/* Month */}
+                                <div>
+                                    <label htmlFor="birthMonth" className="block text-xs font-medium text-gray-500 mb-1">
+                                        Month
+                                    </label>
+                                    <select
+                                        id="birthMonth"
+                                        name="birthMonth"
+                                        value={formData.birthMonth}
+                                        onChange={handleChange}
+                                        className="mt-1 block w-full px-3 py-2 border border-purple-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                                        required
+                                    >
+                                        <option value="">Month</option>
+                                        {monthOptions.map((month) => (
+                                            <option key={month.value} value={month.value}>
+                                                {month.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
                                 <div>
                                     <label htmlFor="birthDay" className="block text-xs font-medium text-gray-500 mb-1">
                                         Day
@@ -169,104 +217,59 @@ export default function KundliFormNew() {
                                     </div>
                                 </div>
 
-                                {/* Month */}
-                                <div>
-                                    <label htmlFor="birthMonth" className="block text-xs font-medium text-gray-500 mb-1">
-                                        Month
-                                    </label>
-                                    <select
-                                        id="birthMonth"
-                                        name="birthMonth"
-                                        value={formData.birthMonth}
-                                        onChange={handleChange}
-                                        className="mt-1 block w-full px-3 py-2 border border-purple-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                                        required
-                                    >
-                                        <option value="">Month</option>
-                                        {monthOptions.map((month) => (
-                                            <option key={month} value={month}>
-                                                {month}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
 
-
-                                {/* Year */}
-                                <div>
-                                    <label htmlFor="birthYear" className="block text-xs font-medium text-gray-500 mb-1">
-                                        Year
-                                    </label>
-                                    <div className="relative">
-                                        <input
-                                            type="number"
-                                            id="birthYear"
-                                            name="birthYear"
-                                            value={formData.birthYear}
-                                            onChange={handleChange}
-                                            min="1900"
-                                            max={currentYear}
-                                            className="mt-1 block w-full px-3 py-2 border border-purple-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                                            placeholder={`1900-${currentYear}`}
-                                            required
-                                        />
-                                        {formData.birthYear &&
-                                            (Number.parseInt(formData.birthYear) < 1900 || Number.parseInt(formData.birthYear) > currentYear) && (
-                                                <p className="absolute right-0 text-xs text-red-500 mt-2.5 whitespace-nowrap">{`Please enter a valid year (1900-${currentYear})`}</p>
-                                            )}
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
                         {/* Time of Birth */}
-                        <div className="bg-white p-2 rounded-xl border border-purple-100 shadow-sm">
+                        <div className="mb-5 bg-white p-2 rounded-xl border border-purple-100 shadow-sm">
                             <label className="block text-sm font-medium text-gray-700 mb-3">Time of Birth</label>
                             <div className="grid grid-cols-3 gap-4">
                                 {/* Hour */}
-                                <div>
+                                <div className="relative">
                                     <label htmlFor="birthHour" className="block text-xs font-medium text-gray-500 mb-1">
                                         Hour
                                     </label>
-                                    <select
+                                    <input
+                                        type="number"
                                         id="birthHour"
                                         name="birthHour"
                                         value={formData.birthHour}
                                         onChange={handleChange}
+                                        min="1"
+                                        max="12"
+                                        placeholder="1-12"
                                         className="mt-1 block w-full px-3 py-2 border border-purple-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                                         required
-                                    >
-                                        <option value="">Hour</option>
-                                        {hourOptions.map((hour) => (
-                                            <option key={hour} value={hour}>
-                                                {hour}
-                                            </option>
-                                        ))}
-                                    </select>
+                                    />
+                                    {formData.birthHour &&
+                                        (Number.parseInt(formData.birthHour) < 1 || Number.parseInt(formData.birthHour) > 12) && (
+                                            <p className="absolute left-0 text-xs text-red-500 mt-2.5 whitespace-nowrap">{`Please enter a valid Hour`}</p>
+                                        )}
                                 </div>
 
                                 {/* Minute */}
-                                <div>
+                                <div className="relative">
                                     <label htmlFor="birthMinute" className="block text-xs font-medium text-gray-500 mb-1">
                                         Minute
                                     </label>
-                                    <select
+                                    <input
+                                        type="number"
                                         id="birthMinute"
                                         name="birthMinute"
                                         value={formData.birthMinute}
                                         onChange={handleChange}
+                                        min="0"
+                                        max="59"
+                                        placeholder="0-59"
                                         className="mt-1 block w-full px-3 py-2 border border-purple-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                                         required
-                                    >
-                                        <option value="">Minute</option>
-                                        {minuteOptions.map((minute) => (
-                                            <option key={minute} value={minute}>
-                                                {minute < 10 ? `0${minute}` : minute}
-                                            </option>
-                                        ))}
-                                    </select>
+                                    />
+                                    {formData.birthMinute &&
+                                        (Number.parseInt(formData.birthMinute) < 0 || Number.parseInt(formData.birthMinute) > 59) && (
+                                            <p className="absolute left-0 text-xs text-red-500 mt-2.5 whitespace-nowrap">{`Please enter a valid Minute`}</p>
+                                        )}
                                 </div>
-
                                 {/* AM/PM */}
                                 <div>
                                     <label htmlFor="birthAmPm" className="block text-xs font-medium text-gray-500 mb-1">
